@@ -1,0 +1,26 @@
+#!/bin/sh
+
+#
+# This script pings a URL and looks for the desired status code and then
+# once received a notification will be sent via notify-send. The script
+# will continually run until the status code is received or manually killed.
+
+# The URL we want to check
+URL=$1
+
+# The desired status for the URL curl request. Like
+# 200, 401, 500, etc
+DESIRED_STATUS=$2
+
+# How long we wait between requests in seconds
+TIMER=10
+
+
+while [ true ]; do
+    STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+    if [ $STATUS == $DESIRED_STATUS ]; then
+        notify-send "the URL is back"
+        exit 1
+    fi
+    sleep $TIMER
+done

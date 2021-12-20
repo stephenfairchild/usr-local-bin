@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+
+/**
+ * Executable script that makes a call out to AWS SQS and deletes the messages out of my development
+ * queues. This should never be ran on a production queue (obviously). This absolutely tramples every
+ * message in the queue without a chance of getting those messages back. This is usually what I want
+ * when developing.
+ *
+ * The alternative is to login to the AWS Console. Find my queues,and one by one hit "purge" and then
+ * refresh to confirm it's been purged. If you've ever used the AWS Console UI you know how painful this is...
+ */
+
+const { exec } = require("child_process");
+
+const queues = [
+    "https://sqs.us-east-1.amazonaws.com/798502617683/domain-events-sfairchild-operations-sqr-io-development",
+    "https://sqs.us-east-1.amazonaws.com/798502617683/domain-events-sfairchild-development-deadletter",
+    "https://sqs.us-east-1.amazonaws.com/798502617683/domain-events-sfairchild-megatron-aje-docker",
+    "https://sqs.us-east-1.amazonaws.com/798502617683/domain-events-sfairchild-orders-development",
+];
+
+queues.forEach((q) => {
+   exec(`aws sqs purge-queue --queue-url ${q}`, (error, stdout, stderr) => {
+
+    if (error) {
+        console.log(`error: ${error.message}`);
+        return;
+    }
+
+    if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+    }
+
+    console.log(`stdout: ${stdout}`);
+   });
+});
+
+console.log(`Queues Messages Eliminated.`);
+

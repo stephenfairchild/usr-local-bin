@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# This script checks the total, used and available disk space
+# on / and sends notification periodically on how much is left
+#
+# Generally used by cron.
+#
+
+TOTAL=$( df -H / | tail -n 1 | cut -d' ' -f3 )
+USED=$( df -H / | tail -n 1 | cut -d' ' -f6 )
+AVAILABLE=$( df -H / | tail -n 1 | cut -d' ' -f9 )
+
+#Filesystem      Size  Used Avail Use% Mounted on
+#/dev/nvme0n1p2  106G   63G   37G  63% /
+
+/usr/bin/notify-send "$(echo -e "\n DISK: / \n TOTAL: $TOTAL \n USED: $USED \n AVAILABLE $AVAILABLE")"
+

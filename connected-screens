@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+#   This script displays the connected monitors
+#
+
+xrandr -q | grep ' connected' | head -n 1 | cut -d ' ' -f1

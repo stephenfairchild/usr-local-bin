@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# This script checks the battery status and if lower than a certain alarm threshold
+# and not currently plugging in then a notification will be sent with notify-send.
+#
+# Generally triggered by cron.
+#
+
+# Battery directory
+BATPATH="/sys/class/power_supply/BAT0"
+
+# Current capacity in %
+CAPACITY=$(cat $BATPATH/capacity)
+
+# Current status. Generally either "Charging" or "Discharging"
+CHARGING=$(cat $BATPATH/status)
+
+# % Threshold to alarm to sound the alarm when crossed.
+ALARM_THRESHOLD=20
+
+echo $CAPACITY
+
+# Warn when we're not charging and the alarm threshold has been crossed.
+if [ $CAPACITY -lt $ALARM_THRESHOLD ] && [ $CHARGING != "Charging" ]; then
+    /usr/bin/notify-send "Battery is almost dead! Currently at $CAPACITY%"
+fi

@@ -1,0 +1,8 @@
+#! /bin/sh
+#
+# Used to adjust the screen brightness level
+#
+
+# Arg 1: Screen. Can be found by running ./connected-screens
+# Arg 2: Brightness Level. Example 0.7 is 70%
+xrandr --output $1 --brightness $2

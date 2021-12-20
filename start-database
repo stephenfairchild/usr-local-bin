@@ -1,0 +1,44 @@
+#! /bin/sh
+
+# This script starts a local database.
+
+case ${1} in
+    m|mysql)
+        docker stop mysql && \
+        docker rm mysql
+
+        docker pull mysql; \
+
+        docker run --name mysql \
+            -v /usr/local/bin/data:/var/lib/mysql \
+            -p 3306:3306 \
+            -e MYSQL_USER=root \
+            -e MYSQL_HOST=0.0.0.0 \
+            -e MYSQL_PASSWORD=root \
+            -e MYSQL_DATABASE=dev \
+            -e MYSQL_ROOT_PASSWORD=root \
+            -d mysql:5.7
+
+        echo "MySQL DB started at 0.0.0.0:3306. User: root. Password: root"
+        ;;
+
+    p|postgres)
+        docker stop postgres-dev && \
+        docker rm postgres-dev
+
+        docker pull postgres; \
+
+        docker run --name postgres-dev \
+        -v /usr/local/bin/postgres:/var/lib/postgresql/data \
+        -p 5432:5432 \
+        -e POSTGRES_USER=root \
+        -e POSTGRES_PASSWORD=root \
+        -e POSTGRES_DB=dev \
+        -d postgres
+
+        echo "Postgres DB started at 0.0.0.0:5432. User: root. Password: root"
+        ;;
+
+    *)
+        ;;
+esac
