@@ -3,6 +3,7 @@
 # This script starts a local database.
 
 case ${1} in
+    # Start a MySQL database
     m|mysql)
         docker stop mysql && \
         docker rm mysql
@@ -22,6 +23,7 @@ case ${1} in
         echo "MySQL DB started at 0.0.0.0:3306. User: root. Password: root"
         ;;
 
+    # Start a Postgres database
     p|postgres)
         docker stop postgres-dev && \
         docker rm postgres-dev
@@ -39,6 +41,24 @@ case ${1} in
         echo "Postgres DB started at 0.0.0.0:5432. User: root. Password: root"
         ;;
 
+    # Start a Mongo database
+    mo)
+        docker stop mongo-dev && \
+        docker rm mongo-dev
+
+        docker pull mongo; \
+
+        docker run --name mongo-dev \
+        -p 27017:27017 \
+        -e MONGO_INITDB_ROOT_USERNAME=root \
+        -e MONGO_INITDB_ROOT_PASSWORD=root \
+        -e POSTGRES_DB=dev \
+        -d mongo:latest
+
+        echo "Mongo DB started at 127.0.0.1:27017. User: root. Password: root"
+        ;;
+
     *)
         ;;
+
 esac
