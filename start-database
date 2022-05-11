@@ -50,9 +50,6 @@ case ${1} in
 
         docker run --name mongo-dev \
         -p 27017:27017 \
-        -e MONGO_INITDB_ROOT_USERNAME=root \
-        -e MONGO_INITDB_ROOT_PASSWORD=root \
-        -e POSTGRES_DB=dev \
         -d mongo:latest
 
         echo "Mongo DB started at 127.0.0.1:27017. User: root. Password: root"
